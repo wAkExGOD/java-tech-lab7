@@ -3,6 +3,8 @@ package com.wakexgod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
 
@@ -10,42 +12,37 @@ public class Main {
         // Test Log4j2:
         logger.info("Start program...");
 
-        City city = new City("Санкт-Петербург");
 
-        // Используем внутренний класс для создания локаций
-        City.Location loc1 = city.new Location("Храм", "Спаса на Крови");
-        City.Location loc2 = city.new Location("Проспект", "Невский");
-        City.Location loc3 = city.new Location("Площадь", "Дворцовая");
+        Mobile mobile = new Mobile();
 
-        city.addLocation(loc1);
-        city.addLocation(loc2);
-        city.addLocation(loc3);
+        Mobile.Phone phone1 = new Mobile.Phone("Google", "Pixel 7", 50, 4355, 6.3, true);
+        Mobile.Phone.CPU cpu1 = phone1.new CPU(2300, 4);
+        mobile.addPhone(phone1);
 
-        // Использование анонимного класса для создания новой локации
-//        city.addLocation(city.new Location("Улица", "Ленина") {
-//            @Override
-//            public String getInfo() {
-//                return "Анонимная локация: " + super.getInfo();
-//            }
-//        });
+        Mobile.Phone phone2 = new Mobile.Phone("Apple", "iPhone 14", 12, 3279, 6.1, false);
+        Mobile.Phone.CPU cpu2 = phone2.new CPU(3200, 6);
+        mobile.addPhone(phone2);
 
-        city.displayLocations();
-        City capital = new City("Москва") {
-            public void displayLocations() {
-                Console.log("====================");
-                Console.log("Локации в столице " + getName() + ":");
-                for (Location location : getLocations()) {
-                    Console.log(location.getInfo());
+        Mobile.Phone phone3 = new Mobile.Phone("Samsung", "Galaxy S23", 50, 3900, 6.1, false);
+        Mobile.Phone.CPU cpu3 = phone3.new CPU(2800, 8);
+        mobile.addPhone(phone3);
+
+        mobile.showPhoneList();
+
+        /* anonymous class */
+        Mobile mobileAnon = new Mobile() {
+            @Override
+            public void breakPhones(List<Phone> phoneList){
+                for (Phone phone: phoneList) {
+                    phone.setBroken(true);
                 }
-                Console.log("====================");
             }
         };
-        City.Location capLoc1 = capital.new Location("Площадь", "Красная");
-        capital.addLocation(capLoc1);
-        capital.displayLocations();
 
+        mobileAnon.breakPhones(mobile.getPhoneList());
 
-        // Другой вариант создания анонимного класса:
+        Console.log("Телефоны сломали");
+        mobile.showPhoneList();
 
 
         // Test Log4j2:
